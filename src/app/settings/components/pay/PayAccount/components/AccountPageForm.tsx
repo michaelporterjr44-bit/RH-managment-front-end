@@ -57,6 +57,9 @@ function AccountPage() {
                     <AccountForm
                         selectedEmployee={selectedEmployee}
                         selectedCodeBank={selectedCodeBank}
+                        onSuccess={(newAccount) => {
+                            console.log("Compte créé :", newAccount);
+                        }}
                     />
                 </div>
                 <div className="w-[40%] space-y-6">

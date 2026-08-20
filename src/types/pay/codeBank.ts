@@ -4,6 +4,11 @@ export interface CodeBank {
   codeBank: string;
   bankName: string;
 }
+export interface CodeBankDto {
+    id: string;
+    codeBank: string;
+    bankName: string;
+}
 
 // DTO pour la création (sans id)
 export type CreateCodeBankDto = Omit<CodeBank, "id">;

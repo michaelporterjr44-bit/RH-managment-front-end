@@ -7,3 +7,4 @@ export interface Indemnite {
     employee: Employee;
     periode: string;
 }
+
