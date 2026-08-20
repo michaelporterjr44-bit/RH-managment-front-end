@@ -40,8 +40,6 @@ type Props = {
   data?: EmployeeDashboard
 }
 
-
-
 export function EmployesSection({ loading, data }: Props) {
   const k = data
   const departements =
@@ -95,18 +93,34 @@ export function EmployesSection({ loading, data }: Props) {
     return acc
   }, {} as ChartConfig)
 
-
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-5">
-        <KpiCard loading={loading} index={0} label="Nouveaux ce mois" value={k?.nouveauxCeMois ?? 0} icon={UserPlus} tone="success" trend={{
-    value: Math.abs(k?.evolutionNouveauxEmployes ?? 0),
-    positif: (k?.evolutionNouveauxEmployes ?? 0) >= 0
-}} />
-        <KpiCard loading={loading} index={1} label="Ancienneté moyenne" value={k?.ancienneteMoyenne ?? 0} suffix="ans" icon={CalendarClock} tone="primary" trend={{
-    value: Math.abs(k?.evolutionAnciennete ?? 0),
-    positif: (k?.evolutionAnciennete ?? 0) >= 0
-}}/>
+        <KpiCard
+          loading={loading}
+          index={0}
+          label="Nouveaux ce mois"
+          value={k?.nouveauxCeMois ?? 0}
+          icon={UserPlus}
+          tone="success"
+          trend={{
+            value: Math.abs(k?.evolutionNouveauxEmployes ?? 0),
+            positif: (k?.evolutionNouveauxEmployes ?? 0) >= 0
+          }}
+        />
+        <KpiCard
+          loading={loading}
+          index={1}
+          label="Ancienneté moyenne"
+          value={k?.ancienneteMoyenne ?? 0}
+          suffix="ans"
+          icon={CalendarClock}
+          tone="primary"
+          trend={{
+            value: Math.abs(k?.evolutionAnciennete ?? 0),
+            positif: (k?.evolutionAnciennete ?? 0) >= 0
+          }}
+        />
         <KpiCard loading={loading} index={2} label="Solde moyen de congé" value={k?.soldeMoyenConge ?? 0} suffix="j" icon={Palmtree} tone="warning" />
         <KpiCard loading={loading} index={3} label="Départements" value={k?.nombreDepartements ?? 0} icon={Building2} tone="neutral" />
         <KpiCard loading={loading} index={4} label="Agences" value={k?.nombreAgences ?? 0} icon={MapPin} tone="neutral" />
@@ -145,10 +159,19 @@ export function EmployesSection({ loading, data }: Props) {
 
         <ChartCard loading={loading} index={1} title="Répartition par agence" description="Effectif par agence">
           <ChartContainer config={agenceConfig} className="h-[280px] w-full">
-            <BarChart data={agences} layout="vertical" margin={{ left: 8, right: 16 }}>
+            <BarChart data={agences} layout="vertical" margin={{ left: 16, right: 16 }}>
               <CartesianGrid horizontal={false} strokeDasharray="3 3" />
               <XAxis type="number" tickLine={false} axisLine={false} />
-              <YAxis type="category" dataKey="agence" tickLine={false} axisLine={false} width={92} />
+              <YAxis
+                type="category"
+                dataKey="agence"
+                tickLine={false}
+                axisLine={false}
+                width={140}
+                tickFormatter={(value: string) =>
+                  value.length > 18 ? `${value.slice(0, 18)}…` : value
+                }
+              />
               <ChartTooltip content={<ChartTooltipContent />} />
               <Bar dataKey="employes" fill="var(--color-employes)" radius={6} barSize={26} />
             </BarChart>
