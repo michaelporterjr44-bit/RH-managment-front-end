@@ -28,15 +28,19 @@ import { LeaveDashboard } from "@/types/dashboard";
 
 const statutColors: Record<string, string> = {
   Validé: 'var(--chart-3)',
+  'Valide': 'var(--chart-3)',
+  'VALIDATED': 'var(--chart-3)',
   'En attente': 'var(--chart-4)',
+  'PENDING': 'var(--chart-4)',
   Refusé: 'var(--chart-5)',
+  'Refuse': 'var(--chart-5)',
+  'REJECTED': 'var(--chart-5)',
 }
 
 type Props = {
   loading: boolean;
   data?: LeaveDashboard;
 };
-
 
 export function CongesSection({ loading, data }: Props) {
   const k = data;
@@ -58,18 +62,20 @@ export function CongesSection({ loading, data }: Props) {
       valeur: item.value,
     })) ?? [];
 
-  const statutConfig = statut.reduce((acc, d) => {
+  const fallbackColors = [
+    'var(--chart-3)',
+    'var(--chart-4)',
+    'var(--chart-5)',
+    'var(--chart-1)',
+    'var(--chart-2)',
+  ];
 
+  const statutConfig = statut.reduce((acc, d, index) => {
     acc[d.statut] = {
-
       label: d.statut,
-
-      color: statutColors[d.statut] ?? "var(--chart-1)"
-
+      color: statutColors[d.statut] ?? fallbackColors[index % fallbackColors.length]
     };
-
     return acc;
-
   }, {} as ChartConfig);
 
   const evoConfig = {
@@ -99,9 +105,9 @@ export function CongesSection({ loading, data }: Props) {
           trend={
             k
               ? {
-                value: Math.abs(k.evolutionEmployesEnConge),
-                positif: k.evolutionEmployesEnConge >= 0,
-              }
+                  value: Math.abs(k.evolutionEmployesEnConge),
+                  positif: k.evolutionEmployesEnConge >= 0,
+                }
               : undefined
           }
         />
@@ -117,9 +123,9 @@ export function CongesSection({ loading, data }: Props) {
           trend={
             k
               ? {
-                value: Math.abs(k.evolutionDemandesEnAttente),
-                positif: k.evolutionDemandesEnAttente >= 0,
-              }
+                  value: Math.abs(k.evolutionDemandesEnAttente),
+                  positif: k.evolutionDemandesEnAttente >= 0,
+                }
               : undefined
           }
         />
@@ -134,9 +140,9 @@ export function CongesSection({ loading, data }: Props) {
           trend={
             k
               ? {
-                value: Math.abs(k.evolutionCongesValides),
-                positif: k.evolutionCongesValides >= 0,
-              }
+                  value: Math.abs(k.evolutionCongesValides),
+                  positif: k.evolutionCongesValides >= 0,
+                }
               : undefined
           }
         />
@@ -151,9 +157,9 @@ export function CongesSection({ loading, data }: Props) {
           trend={
             k
               ? {
-                value: Math.abs(k.evolutionCongesRefuses),
-                positif: k.evolutionCongesRefuses >= 0,
-              }
+                  value: Math.abs(k.evolutionCongesRefuses),
+                  positif: k.evolutionCongesRefuses >= 0,
+                }
               : undefined
           }
         />
@@ -169,9 +175,9 @@ export function CongesSection({ loading, data }: Props) {
           trend={
             k
               ? {
-                value: Math.abs(k.evolutionSoldeMoyen),
-                positif: k.evolutionSoldeMoyen >= 0,
-              }
+                  value: Math.abs(k.evolutionSoldeMoyen),
+                  positif: k.evolutionSoldeMoyen >= 0,
+                }
               : undefined
           }
         />
@@ -201,10 +207,10 @@ export function CongesSection({ loading, data }: Props) {
             <PieChart>
               <ChartTooltip content={<ChartTooltipContent nameKey="statut" />} />
               <Pie data={statut} dataKey="valeur" nameKey="statut" innerRadius={62} strokeWidth={4}>
-                {statut.map((d) => (
+                {statut.map((d, index) => (
                   <Cell
                     key={d.statut}
-                    fill={statutColors[d.statut] ?? "var(--chart-1)"}
+                    fill={statutColors[d.statut] ?? fallbackColors[index % fallbackColors.length]}
                   />
                 ))}
               </Pie>
